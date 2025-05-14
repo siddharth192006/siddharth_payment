@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Siddharth Payment's</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #fff0f6, #e0f7ff);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .card {
+      background: #fff;
+      padding: 3rem;
+      border-radius: 35px;
+      width: min(90%, 480px);
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      border: 4px solid #ff99d6;
+      animation: bounceIn 1s ease;
+    }
+
+    @keyframes bounceIn {
+      0% { transform: scale(0.7); opacity: 0; }
+      60% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+
+    h1 {
+      color: #ff66b2;
+      font-size: 2.2rem;
+      margin-bottom: 2.5rem;
+      text-shadow: 0 3px 8px rgba(255, 102, 178, 0.3);
+    }
+
+    .input-group {
+      margin-bottom: 2.2rem;
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px 15px 15px 50px;
+      background: #f5faff;
+      border: 2px solid #ff99d6;
+      border-radius: 15px;
+      color: #333;
+      font-size: 1.1rem;
+      transition: all 0.3s;
+    }
+
+    input:focus {
+      border-color: #66ccff;
+      box-shadow: 0 0 15px rgba(102, 204, 255, 0.5);
+      outline: none;
+    }
+
+    .input-group::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 15px;
+      transform: translateY(-50%);
+      width: 26px;
+      height: 26px;
+      background-size: contain;
+    }
+
+    .amount::before {
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ff66b2"><path d="M11 4h2v2h-2V4zm0 4h2v2h-2V8zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2zm-6 0h2v2H5v-2zm0-4h2v2H5v-2zm0-4h2v2H5V8zm0-4h2v2H5V4zm14 12h-2v2h2v-2zm0-4h-2v2h2v-2zm0-4h-2v2h2V8zm0-4h-2v2h2V4z"/></svg>');
+    }
+
+    .phone::before {
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ff66b2"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.24 1.02l-2.2 2.2z"/></svg>');
+    }
+
+    .email::before {
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ff66b2"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>');
+    }
+
+    .upi::before {
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ff66b2"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-2 10h-4v2h4v-2zm-6 0H8v2h4v-2zm6-4H6v2h12v-2z"/></svg>');
+    }
+
+    label {
+      color: #ff66b2;
+      position: absolute;
+      top: -24px;
+      left: 15px;
+      font-size: 1rem;
+      background: #fff;
+      padding: 0 8px;
+      font-weight: 500;
+    }
+
+    .pay-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(90deg, #ff66b2, #66ccff);
+      border: none;
+      border-radius: 15px;
+      color: #fff;
+      font-size: 1.4rem;
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+
+    .pay-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: left 0.5s;
+    }
+
+    .pay-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .pay-btn:hover::before {
+      left: 100%;
+    }
+
+    /* Popup Styles */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      padding: 3rem;
+      border-radius: 25px;
+      box-shadow: 0 0 35px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      text-align: center;
+      border: 4px solid #ff66b2;
+      max-width: 350px;
+      animation: popIn 0.4s ease;
+    }
+
+    @keyframes popIn {
+      0% { transform: translate(-50%, -50%) scale(0.7); opacity: 0; }
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+
+    .popup h2 {
+      color: #ff66b2;
+      margin-bottom: 1.2rem;
+      font-size: 1.8rem;
+    }
+
+    .popup p {
+      color: #333;
+      margin-bottom: 1.8rem;
+      font-size: 1rem;
+    }
+
+    .popup button {
+      padding: 12px 35px;
+      background: #ff66b2;
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .popup button:hover {
+      background: #e6398c;
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 999;
+    }
+
+    @media (max-width: 420px) {
+      .card {
+        padding: 2.5rem;
+        width: 95%;
+      }
+      h1 {
+        font-size: 1.9rem;
+      }
+      .pay-btn {
+        font-size: 1.3rem;
+      }
+      .popup {
+        max-width: 300px;
+        padding: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay" id="overlay"></div>
+  <div class="popup" id="error-popup">
+    <h2>Oops!</h2>
+    <p id="error-message"></p>
+    <button onclick="closePopup()">OK</button>
+  </div>
+  <div class="popup" id="success-popup">
+    <h2>Success!</h2>
+    <p id="success-message"></p>
+    <button onclick="closePopup()">OK</button>
+  </div>
+  <div class="card">
+    <h1>Siddharth Payment's</h1>
+    <div class="input-group amount">
+      <label>Amount (₹)</label>
+      <input type="number" id="amount" placeholder="Enter amount" min="1" max="35000">
+    </div>
+    <div class="input-group phone">
+      <label>Phone</label>
+      <input type="tel" id="phone" placeholder="10-digit number" maxlength="10">
+    </div>
+    <div class="input-group email">
+      <label>Email ID</label>
+      <input type="email" id="email" placeholder="example@domain.com">
+    </div>
+    <div class="input-group upi">
+      <label>UPI ID</label>
+      <input type="text" id="upi" placeholder="example@upi">
+    </div>
+    <button class="pay-btn" onclick="initiatePayment()">Pay ₹<span id="btn-amount">0</span></button>
+  </div>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    const amountInput = document.getElementById('amount');
+    const btnAmount = document.getElementById('btn-amount');
+    const phoneInput = document.getElementById('phone');
+    const emailInput = document.getElementById('email');
+    const upiInput = document.getElementById('upi');
+    const overlay = document.getElementById('overlay');
+    const errorPopup = document.getElementById('error-popup');
+    const successPopup = document.getElementById('success-popup');
+    const errorMessage = document.getElementById('error-message');
+    const successMessage = document.getElementById('success-message');
+
+    amountInput.addEventListener('input', () => {
+      const value = Math.min(parseInt(amountInput.value) || 0, 35000);
+      amountInput.value = value || '';
+      btnAmount.textContent = value || '0';
+    });
+
+    function showPopup(popup, message, text) {
+      message.textContent = text;
+      overlay.style.display = 'block';
+      popup.style.display = 'block';
+    }
+
+    function closePopup() {
+      overlay.style.display = 'none';
+      errorPopup.style.display = 'none';
+      successPopup.style.display = 'none';
+    }
+
+    function initiatePayment() {
+      const amount = parseInt(amountInput.value);
+      const phone = phoneInput.value;
+      const email = emailInput.value;
+      const upi = upiInput.value;
+
+      // Validation
+      if (!amount || amount < 1 || amount > 35000) {
+        showPopup(errorPopup, errorMessage, 'Amount must be between ₹1 and ₹35,000!');
+        return;
+      }
+      if (!phone.match(/^\d{10}$/)) {
+        showPopup(errorPopup, errorMessage, 'Enter a valid 10-digit phone number!');
+        return;
+      }
+      if (!email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
+        showPopup(errorPopup, errorMessage, 'Enter a valid email ID (e.g., example@domain.com)!');
+        return;
+      }
+      if (!upi.match(/^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/)) {
+        showPopup(errorPopup, errorMessage, 'Enter a valid UPI ID (e.g., example@upi)!');
+        return;
+      }
+
+      // Razorpay Checkout (Live Mode)
+      const options = {
+        key: 'rzp_live_ih6x2yvKLOtD5Y', // Your live Key ID
+        amount: amount * 100, // Amount in paise
+        currency: 'INR',
+        name: "Siddharth Payment's",
+        description: 'Payment for Services',
+        image: 'https://via.placeholder.com/100', // Replace with your logo
+        handler: function (response) {
+          showPopup(successPopup, successMessage, `Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
+        },
+        prefill: {
+          contact: phone,
+          email: email,
+          method: 'upi',
+          vpa: upi
+        },
+        theme: {
+          color: '#ff66b2'
+        },
+        modal: {
+          ondismiss: function () {
+            showPopup(errorPopup, errorMessage, 'Payment cancelled.');
+          }
+        }
+      };
+
+      try {
+        const rzp = new Razorpay(options);
+        rzp.on('payment.failed', function (response) {
+          showPopup(errorPopup, errorMessage, `Payment Failed: ${response.error.description}`);
+        });
+        rzp.open();
+      } catch (e) {
+        showPopup(errorPopup, errorMessage, 'Failed to load Razorpay. Please try again.');
+      }
+    }
+  </script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</body>
+</html>
